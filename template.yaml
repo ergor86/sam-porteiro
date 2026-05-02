@@ -24,7 +24,7 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(50 10 ? * MON-FRI *)
+            Schedule: cron(20 16 ? * MON-SAT *)
 
       Policies:
         - Statement:
@@ -32,4 +32,26 @@ Resources:
               Effect: Allow
               Action:
                 - ec2:StartInstances
+              Resource: "*"
+  DesligarPorteiro:
+    Type: AWS::Serverless::Function
+    Properties:S
+      CodeUri: .
+      Handler: src/handlers/porteiro.stopEC2Instance
+      Runtime: nodejs24.x
+      Architectures:
+        - x86_64
+
+      Events:
+        CloudWatchEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(21 16 ? * MON-SAT *)
+
+      Policies:
+        - Statement:
+            - Sid: StopEC2
+              Effect: Allow
+              Action:
+                - ec2:StopInstances
               Resource: "*"
